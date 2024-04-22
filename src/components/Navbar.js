@@ -33,7 +33,7 @@ export default function Navbar() {
           <ul className="navbar-nav">
             <li className="nav-item">
               <Link className="nav-link text-white" to="/profile">
-                <i className="fas fa-user"></i>
+               Profile
               </Link>
             </li>
           </ul>
