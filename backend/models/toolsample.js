@@ -1,29 +1,20 @@
-const mongoose=require('mongoose');
+const mongoose=require( 'mongoose');
 
-const userschema= new  mongoose.Schema({
+const userschema= new mongoose.Schema ({
     name:{
         type:String,
         required:[true,"please add the toolname"],
     },
-    location:{
-        type:String,
-        required:[true,"please add the dealername"],
-    },
-    contactno:{
-        type:String,
-        required:[true,"please add the contactno"],
 
-    },
     email:{
         type:String,
-        required:[true,"please add the image"],
+        required:[true,"please add the email"],
     },
     password:{
         type:String,
         required:[true]
     }
 });
-const users= new mongoose.model('users',userschema);
+const UsersModel= new mongoose.model('Users',userschema);
 
- 
-module.exports=users;
+ module.exports=UsersModel;

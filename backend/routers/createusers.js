@@ -1,23 +1,31 @@
 const express=require('express')
-const users=require("../models/toolsample")
-const router=express.Router()
-const db=require('../db')
-async function userss(){
-    try{
-      users.create({
-            name:"bharath",
-            location:"hyd",
-            contact:"87593",
-            email:"nahsf@gmasik.com",
-            password:"3456",
-            contactno:'852654'
+const Users=require("../models/toolsample");
 
-        },{wtimeout:20000});
-        console.log('success');
-        
-    }catch(err){
-        console.log(err);
-        
+const asynchandle=require('express-async-handler');
+const userapp=express.Router()
+userapp.use(express.json())
+let userscollection;
+userapp.post('/newuser',async(req,res)=>{
+    userscollection=req.app.get('userscollection');
+    const {name,email,password}=req.body;
+    
+    const user=await userscollection.insertOne({name,email,password});
+    if(user){
+        res.status(201).json({
+            _id:user._id,
+            name:user.name,
+            email:user.email
+           
+        });
+   
+    }else{
+        res.status(400);
+        throw new Error ("eroor ocuured");
     }
-}
-module.exports=userss;
+    res.send({
+        message:"bharath"
+    });
+    console.log(userscollection);
+})
+
+module.exports=userapp;
