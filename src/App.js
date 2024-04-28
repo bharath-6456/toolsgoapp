@@ -13,6 +13,7 @@ import Pricelist from './screens/Pricelist.js';
 import RegistrationForm from './screens/RegistrationForm.js';
 import OrderSuccess from './screens/OrderSuccess.js';
 import Profile  from './components/profile.js';
+import EquipmentForm from './screens/EquipmentForm.js';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route exact path="/registrationForm" element={<RegistrationForm/>}/>
           <Route exact path="/oderSuccess" element={<OrderSuccess/>} />
           <Route exact path="/profile" element={<Profile/>}/>
+          <Route exact path="/toolregistration" element={<EquipmentForm/>}/>
         </Routes>
       </div>
     </Router>

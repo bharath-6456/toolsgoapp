@@ -1,8 +1,0 @@
-POST http://localhost:5001/create/newuser
-Content-Type: application/json
-
-{
-    "name":"bhar",
-    "email":"kjdfjos",
-    "password":"kjfhvj"
-}

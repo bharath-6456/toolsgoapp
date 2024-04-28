@@ -1,77 +1,120 @@
-import React from 'react'
-import Navbar from '../components/Navbar'
-import Card from '../components/Card'
-import Footer from '../components/Footer'
-import Carousel from '../components/Carousel';
-import RegistrationForm from './RegistrationForm';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import Navbar from "../components/Navbar";
+import Card from "../components/Card";
+import Footer from "../components/Footer";
+import Carousel from "../components/Carousel";
+import RegistrationForm from "./RegistrationForm";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import ChatApp from "../ChatApp";
+import VoiceRecognition from "../components/VoiceRecognition";
+import {useForm} from 'react-hook-form'
 
-// import tools from '../toolsgo';
-
-const tools= [
-  {
-      "toolName":"combined-harvestor",
-      "dealerName":"solame",
-      "contactno":"987485296",
-      "image":"https://cdn.pixabay.com/photo/2015/04/01/12/59/combine-harvester-702413_640.jpg"
-  },
-  {
-      "toolName":"rooter",
-      "dealerName":"philip",
-      "contactno":"98746596",
-      "image":"https://i.ytimg.com/vi/2RHmoNItr6Q/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGGUgSyhHMA8=&rs=AOn4CLB9BYKMCbYKnwHcy3W9_bJyZr5SYA"
-  },
-  {
-      "toolName":"hay-collector",
-      "dealerName":"rajesh",
-      "contactno":"987485296",
-      "image":"https://cdn.pixabay.com/photo/2020/05/11/09/22/agriculture-5157183_1280.jpg"
-  },
-  {
-      "toolName":"jcb",
-      "dealerName":"ellivesh",
-      "contactno":"987485296",
-      "image":"https://img.freepik.com/premium-photo/excavator-earthmoving-coal-open-pit-sunset-background-recycling-coal-mining-industry_124507-67585.jpg?size=626&ext=jpg&ga=GA1.1.2061423295.1690085389&semt=sph"
-  },
-  {
-    "toolName":"corn_harvester",
-    "dealerName":"Medraid",
-    "contactno":"987485256",
-    "image":"https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTbkjvB4n41J2p0ICvbfmDZnGfKoGkb_QTWMgv5llZjlhUSwvOpY5kO67VhS9Rl"
-},
-{
-  "toolName":"land-Tover",
-  "dealerName":"Mellaid",
-  "contactno":"987485256",
-  "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIaBBd_Wm8A6V6b3my0QEdjRJHrSMODPXEVG2sp1SebYPki9uRLLbpzGa_Ptqv"
-}
-];
 export default function Home() {
-  
-  
+  const [toolsList, setToolsList] = useState([]);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [showChatApp, setShowChatApp] = useState(false);
+  const [showVoiceRecognition, setShowVoiceRecognition] = useState(false);
+
+  useEffect(() => {
+    async function getTools() {
+      try {
+        const response = await axios.get("http://localhost:5001/gettools");
+        setToolsList(response.data.payload);
+      } catch (error) {
+        console.error("Error fetching tools:", error);
+      }
+    }
+    getTools();
+  }, []);
+
+  let {register,handleSubmit} = useForm()
+  // async function handleFilter(Obj) {
+  //   try {
+  //     const res = await axios.get("http://localhost:5001/filter",Obj)
+  //     console.log(res)
+  //     setToolsList(res.data.payload)
+  //   } catch(err) {
+  //     console.error("Error filtering ",err)
+  //   }
+  // }
+
+  const toggleSpeechSynthesis = () => {
+    if (isSpeaking) {
+      window.speechSynthesis.cancel();
+    } else {
+      const toolNames = toolsList.map((tool) => tool.Toolname).join(", ");
+      textToSpeech(toolNames);
+    }
+    setIsSpeaking(!isSpeaking);
+  };
+
+  const textToSpeech = (text) => {
+    const utterance = new SpeechSynthesisUtterance(text);
+    window.speechSynthesis.speak(utterance);
+  };
+
+  const handleImageClick = () => {
+    setShowChatApp(!showChatApp);
+  };
+
+  const handleVoiceRecognitionClick = () => {
+    setShowVoiceRecognition(!showVoiceRecognition);
+  };
+
   return (
-   
     <div>
-        <div class='sticky-top'><Navbar/></div>
-        <div>
-          <Carousel/>
-        </div>
-      <div className="row justify-content-center row-cols-sm-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-3 mt-xl-4">
-      
-      {
-          tools.map((tool, index) => (
-            <Card key={index} {...tool} />
-          ))
-        }
-        
-        
-       
+      <div className="sticky-top">
+        <Navbar />
       </div>
+      <div>
+        <Carousel />
+      </div>
+      <div className="container" >
+        <select className="m-2 p-1" {...register('location')}>
+          <option default>Select a city</option>
+          <option>Hyderabad</option>
+          <option>Chennai</option>
+          <option>Mumbai</option>
+        </select>
+        <input type="number" placeholder="Enter maximum price" {...register('price')}/>
+        <button type="submit" className=" m-2 px-2 py-1 btn btn-secondary"  >Filter</button>
+      </div>
+      <div className="row justify-content-center row-cols-sm-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-4 mt-xl-4 m-2">
+        {toolsList.map((tool, index) => (
+          <Card key={index} {...tool} />
+        ))}
+      </div>
+      <button onClick={toggleSpeechSynthesis} className="btn-primary btn" style={{"marginLeft": "700px"}}>
+        {isSpeaking ? "Stop Speaking" : "Start Speaking"}
+      </button>
+      <div>
+        <img
+          src="https://static.vecteezy.com/system/resources/thumbnails/007/225/199/small_2x/robot-chat-bot-concept-illustration-vector.jpg"
+          alt="Chat Bot"
+          style={{
+            position: "fixed",
+            bottom: "20px",
+            right: "20px",
+            height: "50px",
+            width: "50px",
+            zIndex: "9999",
+          }}
+          onClick={handleImageClick}
+        />
+      </div>
+      {/* Render ChatApp based on showChatApp state */}
+      {showChatApp && <ChatApp />}
       
-    
-        <Footer/>
-       </div>
-       
-    
-  )
+      {/* Render VoiceRecognition based on showVoiceRecognition state */}
+      {showVoiceRecognition && <VoiceRecognition />}
+      
+      {/* Button to toggle voice recognition */}
+      <button onClick={handleVoiceRecognitionClick} className="btn-secondary btn" style={{"marginLeft": "700px"}}>
+        {showVoiceRecognition ? "Hide Voice Recognition" : "Show Voice Recognition"}
+      </button>
+      <Footer />
+    </div>
+  );
 }
+

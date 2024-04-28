@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function() {
+export default function About() {
   return (
     
 <section class="py-3 py-md-5">
