@@ -63,17 +63,17 @@ app.put('/removeTool:id',async(req,res)=> {
     await AddTool.update({_id:id},{$set:{...deleteObj,Status:false}})
 })
 
-app.get('/filter',async(req,res)=>{
-    let body = req.body
-    let tools
-    if(body.location!=null && body.price==null)
-        tools = await AddTool.find({Location:body.location})
-    else if(body.price!=null && body.location==null)
-        tools = await AddTool.find({Price:{$lte:body.price}})
-    else if(body.price!=null && body.location!=null)
-        tools = await AddTool.find({$and:[{Price:{$lte:body.price}},{Location:body.location}]})
-    res.send({payload:tools})
-})
+// app.get('/filter',async(req,res)=>{
+//     let body = req.body
+//     let tools
+//     if(body.location!=null && body.price==null)
+//         tools = await AddTool.find({Location:body.location})
+//     else if(body.price!=null && body.location==null)
+//         tools = await AddTool.find({Price:{$lte:body.price}})
+//     else if(body.price!=null && body.location!=null)
+//         tools = await AddTool.find({$and:[{Price:{$lte:body.price}},{Location:body.location}]})
+//     res.send({payload:tools})
+// })
 
 app.listen(port, () => {
     console.log('Example app listening on port', port);

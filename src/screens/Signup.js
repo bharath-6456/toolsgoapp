@@ -20,7 +20,7 @@ export default function Signup() {
       };
       setloading(true);
   
-      const { data } = await axios.post('http://localhost:5001/register', {
+      const { data } = await axios.post('https://toolsgoapp-backend.onrender.com/register', {
         name, email, password
       }, config);
 

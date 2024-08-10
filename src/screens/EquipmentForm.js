@@ -25,7 +25,7 @@ const navigate=useNavigate();
         setloading(true)
       
 
-      const res = await axios.post('http://localhost:5001/addtool', {Toolname,DealerName,PhoneNumber,Image,Price,Location},config
+      const res = await axios.post('https://toolsgoapp-backend.onrender.com/addtool', {Toolname,DealerName,PhoneNumber,Image,Price,Location},config
       );
       alert("tool registered successfully")
       navigate('/')

@@ -19,7 +19,7 @@ export default function Home() {
   useEffect(() => {
     async function getTools() {
       try {
-        const response = await axios.get("http://localhost:5001/gettools");
+        const response = await axios.get("https://toolsgoapp-backend.onrender.com/gettools");
         setToolsList(response.data.payload);
       } catch (error) {
         console.error("Error fetching tools:", error);
